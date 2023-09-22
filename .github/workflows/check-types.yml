@@ -1,0 +1,26 @@
+name: Check Types
+ 
+on: 
+  workflow_call:
+    inputs:
+      php:
+        type: string
+        default: '8.2'
+ 
+jobs:
+  phpstan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+ 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ inputs.php }}
+          coverage: none
+ 
+      - name: Install composer dependencies
+        run: composer install -n --prefer-dist
+ 
+      - name: Check types
+        run: ./vendor/bin/phpstan --error-format=github
